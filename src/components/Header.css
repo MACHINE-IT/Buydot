@@ -1,6 +1,6 @@
 .header {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between !important;
     align-items: center;
     padding: 1rem;
     height: 5vh;
@@ -10,6 +10,10 @@
 
 .username-text {
     display: none;
+}
+
+.button {
+    background-color: #00a278 !important;
 }
 
 .header-title {

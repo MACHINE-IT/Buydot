@@ -3,12 +3,15 @@ import { Box } from "@mui/system";
 import axios from "axios";
 import { SnackbarProvider, useSnackbar } from "notistack";
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { config } from "../App";
 import Footer from "./Footer";
 import Header from "./Header";
 import "./Register.css";
 
 const Register = () => {
+  const history = useHistory();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -64,19 +67,16 @@ const Register = () => {
    */
   const register = async (formData) => {
     const userData = { ...formData };
-    // console.log(`formData in register function at line 57 is: ${JSON.stringify(userData)}`);
     const isInputValid = validateInput();
     if (isInputValid) {
       setApiLoading(true);
       try {
-        console.log(`user data is valid is: ${isInputValid}`);
         const backedPostURL = `${config.endpoint}/auth/register`;
-        console.log(backedPostURL);
         const response = await axios.post(backedPostURL, userData);
         const responseStatus = response.status;
-        console.log(
-          `helloresponse: ${response}, responseStatus is: ${response.status} and response message is: ${response.message}`
-        );
+        // console.log(
+        //   `helloresponse: ${response}, responseStatus is: ${response.status} and response message is: ${response.message}`
+        // );
         setApiLoading(false);
         if (responseStatus === 201) {
           enqueueSnackbar(
@@ -89,15 +89,16 @@ const Register = () => {
               },
             }
           );
+          history.push("/login");
         } else {
           throw new Error(response);
         }
       } catch (error) {
         setApiLoading(false);
-        console.log(
-          `response: ${error.response.status.toString()}, responseStatus is: ${error.status
-          } and response message is: ${error.message}`
-        );
+        // console.log(
+        //   `response: ${error.response.status.toString()}, responseStatus is: ${error.status
+        //   } and response message is: ${error.message}`
+        // );
         if (error.response.status.toString().match(/^4/)) {
           enqueueSnackbar(
             error.response.data.message,
@@ -235,7 +236,7 @@ const Register = () => {
         minHeight="100vh"
         className="mainForRegister"
       >
-        <Header hasHiddenAuthButtons />
+        <Header hasHiddenAuthButtons={1} />
         <form onSubmit={formSubmitHandler}>
           <Box className="content">
             <Stack spacing={2} className="form">
@@ -291,9 +292,9 @@ const Register = () => {
 
               <p className="secondary-action">
                 Already have an account?{" "}
-                <a className="link" href="#">
+                <Link className="link" to="/login">
                   Login here
-                </a>
+                </Link>
               </p>
             </Stack>
           </Box>
