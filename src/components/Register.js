@@ -35,8 +35,7 @@ const Register = () => {
     const formData = {
       username: username,
       password: password,
-    };
-
+    }
     register(formData);
   };
 
@@ -95,10 +94,6 @@ const Register = () => {
         }
       } catch (error) {
         setApiLoading(false);
-        // console.log(
-        //   `response: ${error.response.status.toString()}, responseStatus is: ${error.status
-        //   } and response message is: ${error.message}`
-        // );
         if (error.response.status.toString().match(/^4/)) {
           enqueueSnackbar(
             error.response.data.message,
@@ -125,11 +120,6 @@ const Register = () => {
       }
     }
 
-    // try {
-    //   const response = axios.post(backedPostURL)
-    // } catch (e) {
-
-    // }
   };
 
   // TODO: CRIO_TASK_MODULE_REGISTER - Implement user input validation logic
