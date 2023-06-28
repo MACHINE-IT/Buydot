@@ -54,6 +54,7 @@ const Header = ({ children, hasHiddenAuthButtons }) => {
         <Box className="header-title">
           <img src="logo_light.svg" alt="QKart-icon"></img>
         </Box>
+        {children}
         <Stack direction="row" spacing={2} alignItems="center">
           {/* <Avatar src="/broken-image.jpg" alt={userInfo.username}/>
           <p className="username-text">{userInfo.username.charAt(0).toUpperCase() + userInfo.username.slice(1)}</p>
@@ -73,6 +74,7 @@ const Header = ({ children, hasHiddenAuthButtons }) => {
         <Box className="header-title">
           <img src="logo_light.svg" alt="QKart-icon"></img>
         </Box>
+        {children}
         <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "flex-end" }}>
           <Stack direction="row" spacing={2}>
           <Button variant="text" onClick={loginButtonHandler}>LOGIN</Button>
@@ -89,6 +91,7 @@ const Header = ({ children, hasHiddenAuthButtons }) => {
         <Box className="header-title">
           <img src="logo_light.svg" alt="QKart-icon"></img>
         </Box>
+        {children}
         <Button
           className="explore-button"
           startIcon={<ArrowBackIcon />}
