@@ -14,6 +14,8 @@
 
 .button {
     background-color: #00a278 !important;
+    color: white !important;
+    cursor: pointer;
 }
 
 .header-title {

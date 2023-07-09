@@ -4,6 +4,8 @@ import Box from "@mui/material/Box";
 import React, { useState, useEffect } from "react";
 import { useHistory, Link } from "react-router-dom";
 import "./Header.css";
+import axios from "axios";
+import { config } from "../App";
 
 const Header = ({ children, hasHiddenAuthButtons }) => {
   const history = useHistory();
@@ -22,9 +24,24 @@ const Header = ({ children, hasHiddenAuthButtons }) => {
     history.push("/register");
   }
 
-  const logoutButtonHandler = () => {
+  const logoutButtonHandler = async () => {
     localStorage.clear();
     setUserLoggedIn(false);
+
+    // Get the cart data from local storage
+    const cartData = JSON.parse(localStorage.getItem("cart"));
+
+    // Send a POST request to update the cart on the server
+    try {
+      await axios.post(`${config.endpoint}/cart`, cartData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+    } catch (e) {
+      console.error("Error updating cart:", e);
+    }
+
     history.push("/login");
     // window.location.reload();
   }

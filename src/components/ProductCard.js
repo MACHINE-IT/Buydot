@@ -12,11 +12,12 @@ import {
 import React from "react";
 import "./ProductCard.css";
 
-const ProductCard = ({ product, handleAddToCart }) => {
+const ProductCard = ({ product, handleAddToCart}) => {
 
-  const handleAddCart = () => {
-
-  }
+  // const handleAddCart = () => {
+  //   // console.log( "line 18 in productcard", token, items, products, product.productId, 1)
+  //   // handleAddToCart(token, items, products, product._id, 1)
+  // }
   return (
     // <Card className="card">
     // </Card>
@@ -50,7 +51,7 @@ const ProductCard = ({ product, handleAddToCart }) => {
             variant="contained"
             fullWidth
             startIcon={<AddShoppingCartOutlined/>}
-            onClick={handleAddCart}
+            onClick={() => {handleAddToCart(product._id, 1)}}
           >
             ADD TO CART
           </Button>
