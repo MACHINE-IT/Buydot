@@ -12,7 +12,7 @@ import "./Cart.css";
 import { config } from "../App";
 import axios from "axios";
 import { useSnackbar } from "notistack";
-//import Checkout from "./Checkout"
+import Checkout from "./Checkout"
 // Definition of Data Structures used
 /**
  * @typedef {Object} Product - Data on product available to buy
@@ -92,6 +92,13 @@ export const getTotalCartValue = (items) => {
   }, 0)
 };
 
+export const getTotalItems = (items) => {
+  return items.reduce((total, item) => {
+    return total + item.qty;
+  }, 0)
+};
+
+
 
 /**
  * Component to display the current quantity for a product and + and - buttons to update product quantity on cart
@@ -105,8 +112,11 @@ export const getTotalCartValue = (items) => {
  * @param {Function} handleDelete
  *    Handler function which reduces the quantity of a product in cart by 1
  * 
+ * @param {Boolean} isReadOnly
+ *    If product quantity on cart is to be displayed as read only without the + - options to change quantity
  * 
  */
+
 const ItemQuantity = ({
   value,
   handleAdd,
@@ -139,12 +149,15 @@ const ItemQuantity = ({
  * @param {Function} handleDelete
  *    Current quantity of product in cart
  * 
+ * @param {Boolean} isReadOnly
+ *    If product quantity on cart is to be displayed as read only without the + - options to change quantity
  * 
  */
 const Cart = ({
   products,
   items = [],
   handleQuantity,
+  isReadOnly
 }) => {
   const { enqueueSnackbar } = useSnackbar();
   const history = useHistory();
@@ -361,8 +374,8 @@ const Cart = ({
           flexDirection="column"
         >
           {items.map((item) => (
-            <Box display="flex" alignItems="flex-start" padding="1rem">
-              <Box className="image-container">
+            <Box display="flex" alignItems="flex-start" padding="1rem" key={item._id}>
+              <Box className="image-container" sx={{ height: "10rem", width: "10rem" }}>
                 <img
                   // Add product image
                   src={item.image}
@@ -370,6 +383,7 @@ const Cart = ({
                   alt={item.name}
                   width="100%"
                   height="100%"
+                  style={{ objectFit: "contain" }}
                 />
               </Box>
               <Box
@@ -385,16 +399,25 @@ const Cart = ({
                   justifyContent="space-between"
                   alignItems="center"
                 >
-                  <ItemQuantity
-                    // Add required props by checking implementation
-                    value={item.qty}
-                    handleAdd={async () => {
-                      await handleQuantity(item._id, item.qty + 1)
-                    }}
-                    handleDelete={async () => {
-                      await handleQuantity(item._id, item.qty - 1)
-                    }}
-                  />
+                  {
+                    isReadOnly ? (
+                      <Box padding="0.5rem" fontWeight="700">
+                        Qty: {item.qty}
+                      </Box>
+                    ) : (
+                      <ItemQuantity
+                        // Add required props by checking implementation
+                        value={item.qty}
+                        handleAdd={async () => {
+                          await handleQuantity(item._id, item.qty + 1)
+                        }}
+                        handleDelete={async () => {
+                          await handleQuantity(item._id, item.qty - 1)
+                        }}
+                      />
+                    )
+                  }
+
                   <Box padding="0.5rem" fontWeight="700">
                     ${item.cost}
                   </Box>
@@ -402,34 +425,81 @@ const Cart = ({
               </Box>
             </Box>
           ))}
-          <Box color="#3C3C3C" alignSelf="center">
-            Order total
-          </Box>
-          <Box
-            color="#3C3C3C"
-            fontWeight="700"
-            fontSize="1.5rem"
-            alignSelf="center"
-            data-testid="cart-total"
-          >
-            ${getTotalCartValue(items)}
+          <Box display="flex" justifyContent="space-between" alignItems="center" padding="1rem" width="100%">
+            <Box color="#3C3C3C" >
+              Order total
+            </Box>
+            <Box
+              color="#3C3C3C"
+              fontWeight="700"
+              fontSize="1.5rem"
+              alignSelf="center"
+              data-testid="cart-total"
+            >
+              ${getTotalCartValue(items)}
+            </Box>
           </Box>
         </Box>
 
-        <Box display="flex" justifyContent="flex-end" className="cart-footer">
-          <Button
-            color="primary"
-            variant="contained"
-            startIcon={<ShoppingCart />}
-            className="checkout-btn"
-            onClick={() => {
-              history.push("/checkout")
-            }}
-          >
-            Checkout
-          </Button>
-        </Box>
+        {
+          !isReadOnly && (
+            <Box display="flex" justifyContent="flex-end" className="cart-footer">
+              <Button
+                color="primary"
+                variant="contained"
+                startIcon={<ShoppingCart />}
+                className="checkout-btn"
+                onClick={() => {
+                  history.push("/checkout")
+                }}
+              >
+                Checkout
+              </Button>
+            </Box>
+          )
+        }
       </Box>
+      {
+        isReadOnly && (
+          <Box className="cart">
+            <Box
+              padding="1rem"
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+              flexDirection="column"
+            >
+              <Box width="100%" color="#3C3C3C" fontWeight="700">
+                Order Details
+              </Box>
+              <Box display='flex' justifyContent='space-between' alignItems="center" padding="1rem" width="100%" mb="-1rem">
+                <Box>Products</Box>
+                <Box>{getTotalItems(items)}</Box>
+              </Box>
+              <Box display='flex' justifyContent='space-between' alignItems="center" padding="1rem" width="100%" mb="-1rem">
+                <Box>Subtotal</Box>
+                <Box>${getTotalCartValue(items)}</Box>
+              </Box>
+              <Box display='flex' justifyContent='space-between' alignItems="center" padding="1rem" width="100%" mb="-1rem">
+                <Box>Shipping Charges</Box>
+                <Box>${0}</Box>
+              </Box>
+              <Box display="flex" justifyContent="space-between" alignItems="center" padding="1rem" width="100%" mb="-1rem">
+                <Box color="#3C3C3C" >
+                  Order total
+                </Box>
+                <Box
+                  color="#3C3C3C"
+                  fontWeight="700"
+                  alignSelf="center"
+                >
+                  ${getTotalCartValue(items)}
+                </Box>
+              </Box>
+            </Box>
+          </Box>
+        )
+      }
     </>
   );
 };
