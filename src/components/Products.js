@@ -513,8 +513,8 @@ const Products = () => {
                     <Grid item xs={6} md={3} key={product._id}>
                       {console.log("498>>>", userToken, items, products, product._id, 1, "498")}
                       <ProductCard product={product}
-                        handleAddToCart={(productId, qty) => {
-                          addToCart(token,
+                        handleAddToCart={async (productId, qty) => {
+                          await addToCart(token,
                             items,
                             products,
                             productId,

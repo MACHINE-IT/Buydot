@@ -388,11 +388,11 @@ const Cart = ({
                   <ItemQuantity
                     // Add required props by checking implementation
                     value={item.qty}
-                    handleAdd={() => {
-                      handleQuantity(item._id, item.qty + 1)
+                    handleAdd={async () => {
+                      await handleQuantity(item._id, item.qty + 1)
                     }}
-                    handleDelete={() => {
-                      handleQuantity(item._id, item.qty - 1)
+                    handleDelete={async () => {
+                      await handleQuantity(item._id, item.qty - 1)
                     }}
                   />
                   <Box padding="0.5rem" fontWeight="700">
