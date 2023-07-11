@@ -7,7 +7,7 @@ import Thanks from "./components/Thanks"
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 export const config = {
-  endpoint: `http://${ipConfig.workspaceIp}:8082/api/v1`,
+  endpoint: `https://buydot.onrender.com/api/v1`,
 };
 
 function App() {
