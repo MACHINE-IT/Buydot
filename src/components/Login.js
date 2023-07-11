@@ -238,7 +238,7 @@ const Login = () => {
                     className="button"
                     variant="contained"
                   >
-                    LOGIN TO QKART
+                    LOGIN TO BuyDot
                   </Button>
                 )}
               </Stack>
